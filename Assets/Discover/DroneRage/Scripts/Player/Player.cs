@@ -19,6 +19,10 @@ namespace Discover.DroneRage.Player
 {
     public class Player : NetworkMultiton<Player>, IDamageable
     {
+        private Transform m_headPose;
+        private bool m_drivePoseFromHeadset;
+        private bool m_loggedMissingCameraRig;
+
         [Networked]
         public float Health { get; set; } = 100f;
 
@@ -62,7 +66,48 @@ namespace Discover.DroneRage.Player
 
         public void SetupPlayer()
         {
-            // Initialization logic if needed, previously called from GameController
+            if (!HasStateAuthority)
+                return;
+
+            m_drivePoseFromHeadset = true;
+            TryBindHeadPose();
+        }
+
+        public override void FixedUpdateNetwork()
+        {
+            if (!HasStateAuthority || !m_drivePoseFromHeadset)
+                return;
+
+            if (m_headPose == null)
+            {
+                TryBindHeadPose();
+                if (m_headPose == null)
+                {
+                    if (!m_loggedMissingCameraRig)
+                    {
+                        Debug.LogWarning("[DroneRage] Player has no CameraRig/centerEyeAnchor yet; player pose will remain at spawn until available.", this);
+                        m_loggedMissingCameraRig = true;
+                    }
+
+                    return;
+                }
+            }
+
+            var headRotation = m_headPose.rotation;
+            var yawOnlyRotation = Quaternion.Euler(0f, headRotation.eulerAngles.y, 0f);
+            transform.SetPositionAndRotation(m_headPose.position, yawOnlyRotation);
+        }
+
+        private void TryBindHeadPose()
+        {
+            if (m_headPose != null)
+                return;
+
+            var cameraRig = PhotonNetwork.CameraRig;
+            if (cameraRig != null && cameraRig.centerEyeAnchor != null)
+            {
+                m_headPose = cameraRig.centerEyeAnchor;
+            }
         }
 
         public static Player GetRandomLivePlayer()
