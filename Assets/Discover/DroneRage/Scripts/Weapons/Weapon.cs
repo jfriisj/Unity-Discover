@@ -163,7 +163,13 @@ namespace Discover.DroneRage.Weapons
                 var damage = Mathf.Lerp(m_weapon.WeaponDamage.x, m_weapon.WeaponDamage.y, hitStrength);
                 if (isFriendlyFire)
                 {
+#if DRONERAGE_PVP
+                    // PvP build: player-vs-player hits do full damage like drone hits.
+                    damage *= 1.0f;
+#else
+                    // Default DroneRage behavior: heavily reduce friendly fire.
                     damage *= 0.2f;
+#endif
                 }
                 damageable.TakeDamage(damage, closestHit.point, closestHit.normal, m_weapon.DamageCallback);
             }
