@@ -10,6 +10,7 @@ using Fusion;
 using Oculus.Interaction.Input;
 using UnityEngine;
 using Assert = UnityEngine.Assertions.Assert;
+using Discover.DroneRage.Pvp;
 
 namespace Discover.DroneRage.Game
 {
@@ -91,6 +92,11 @@ namespace Discover.DroneRage.Game
         {
             base.Spawned();
             InitPlayer(Runner.LocalPlayer);
+
+            if (DroneRagePvpMode.IsPvpMode())
+            {
+                m_waveCompleteUI.gameObject.SetActive(true);
+            }
         }
 
         private async void InitPlayer(PlayerRef targetPlayer)

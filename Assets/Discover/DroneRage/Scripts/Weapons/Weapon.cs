@@ -2,6 +2,7 @@
 
 using System;
 using Discover.DroneRage.PowerUps;
+using Discover.DroneRage.Pvp;
 using Meta.Utilities;
 using Oculus.Interaction.HandGrab;
 using UnityEngine;
@@ -163,7 +164,23 @@ namespace Discover.DroneRage.Weapons
                 var damage = Mathf.Lerp(m_weapon.WeaponDamage.x, m_weapon.WeaponDamage.y, hitStrength);
                 if (isFriendlyFire)
                 {
-                    damage *= 0.2f;
+                    if (DroneRagePvpMode.IsPvpMode())
+                    {
+                        var config = DroneRagePvpMatchController.Instance != null ? DroneRagePvpMatchController.Instance.Config : null;
+                        if (config != null)
+                        {
+                            damage *= config.pvpDamageEnabled ? config.friendlyFireMultiplier : 0f;
+                        }
+                        else
+                        {
+                            // fallback to defaults (enabled, 1.0 multiplier)
+                            damage *= 1.0f;
+                        }
+                    }
+                    else
+                    {
+                        damage *= 0.2f;
+                    }
                 }
                 damageable.TakeDamage(damage, closestHit.point, closestHit.normal, m_weapon.DamageCallback);
             }

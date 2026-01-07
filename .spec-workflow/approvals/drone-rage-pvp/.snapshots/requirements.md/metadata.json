@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/specs/drone-rage-pvp/requirements.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-06T19:37:57.070Z",
+      "trigger": "initial",
+      "approvalId": "approval_1767728277055_jyuova4kj",
+      "approvalTitle": "Approve requirements: DroneRage PvP (with Drones)"
+    }
+  ]
+}

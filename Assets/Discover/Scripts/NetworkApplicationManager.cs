@@ -46,13 +46,18 @@ namespace Discover
 
         public void LaunchApplication(AppManifest appManifest, Transform appAnchor)
         {
+            LaunchApplication(appManifest, appAnchor.position, appAnchor.rotation);
+        }
+
+        public void LaunchApplication(AppManifest appManifest, Vector3 position, Quaternion rotation)
+        {
             if (HasStateAuthority)
             {
-                LaunchApplication(appManifest, appAnchor.position, appAnchor.rotation);
+                LaunchApplicationInternal(appManifest, position, rotation);
             }
             else
             {
-                LaunchApplicationOnServerRPC(appManifest.UniqueName, appAnchor.position, appAnchor.rotation);
+                LaunchApplicationOnServerRPC(appManifest.UniqueName, position, rotation);
             }
         }
 
@@ -102,10 +107,10 @@ namespace Discover
         private void LaunchApplicationOnServerRPC(string appName, Vector3 position, Quaternion rotation)
         {
             var manifest = m_appList.GetManifestFromName(appName);
-            LaunchApplication(manifest, position, rotation);
+            LaunchApplicationInternal(manifest, position, rotation);
         }
 
-        private void LaunchApplication(AppManifest appManifest, Vector3 position, Quaternion rotation)
+        private void LaunchApplicationInternal(AppManifest appManifest, Vector3 position, Quaternion rotation)
         {
             if (CurrentApplication != null)
             {

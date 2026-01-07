@@ -74,12 +74,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _interpolationDataSource: 0
-  HealthUI: {fileID: 8020879778953267120, guid: 6bd5ccdb8e1d0b54a8b4e5539fc54890, type: 3}
-  CriticalHealthUI: {fileID: 1042680469190191119, guid: aa8b15017e6b54b56b991e098b188b13, type: 3}
-  DamageVfx: {fileID: 2334803508391726607, guid: 565afd85fd303d241839b2fe9b8478ed, type: 3}
-  DamageBehindVfx: {fileID: 3279011142913521994, guid: 2190f286a0d66de4b80980efbc623df6, type: 3}
-  PlayerStats: {fileID: 3127621071817099757}
   _Health: 100
+  _IsDead:
+    _value: 0
+  _PlayerUid: 0
+  m_playerStats: {fileID: 3127621071817099757}
 --- !u!114 &9100260363608481585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,3 +182,8 @@ MonoBehaviour:
   _DamageTaken: 0
   _HealingReceived: 0
   _TicksSurvived: 0
+  _PvpKills: 0
+  _PvpDeaths: 0
+  _PvpScore: 0
+  _DamageDealtToPlayers: 0
+  _DamageTakenFromPlayers: 0

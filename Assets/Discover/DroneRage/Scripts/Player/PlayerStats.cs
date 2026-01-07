@@ -16,6 +16,12 @@ namespace Discover.DroneRage.Player
         [Networked] public float HealingReceived { get; set; }
         [Networked] public ulong TicksSurvived { get; set; }
 
+        [Networked] public uint PvpKills { get; set; }
+        [Networked] public uint PvpDeaths { get; set; }
+        [Networked] public uint PvpScore { get; set; }
+        [Networked] public float DamageDealtToPlayers { get; set; }
+        [Networked] public float DamageTakenFromPlayers { get; set; }
+
         public double CalculateAccuracy()
         {
             return ShotsFired == 0 ? 0 : ShotsHit / (double)ShotsFired;

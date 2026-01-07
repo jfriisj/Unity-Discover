@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3829488388184076098}
   - component: {fileID: -706497250677679896}
   - component: {fileID: 6653393984057129077}
+  - component: {fileID: 7322735330828216019}
   m_Layer: 0
   m_Name: DroneRageGameController
   m_TagString: Untagged
@@ -75,7 +76,23 @@ MonoBehaviour:
   NestedObjects: []
   NetworkedBehaviours:
   - {fileID: -706497250677679896}
+  - {fileID: 7322735330828216019}
   SimulationBehaviours: []
+--- !u!114 &7322735330828216019
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497158581494567899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f76f3474874d9f1439da77319df4cfd4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interpolationDataSource: 0
+  _State: 0
+  m_config: {fileID: 11400000, guid: 79fee6ed9a1bffe4f99f906a84a35972, type: 2}
 --- !u!1001 &7784573700068733519
 PrefabInstance:
   m_ObjectHideFlags: 0

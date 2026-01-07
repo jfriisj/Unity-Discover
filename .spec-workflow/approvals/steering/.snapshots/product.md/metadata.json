@@ -1,0 +1,14 @@
+{
+  "filePath": ".spec-workflow/steering/product.md",
+  "currentVersion": 1,
+  "snapshots": [
+    {
+      "version": 1,
+      "filename": "snapshot-001.json",
+      "timestamp": "2026-01-06T20:29:15.369Z",
+      "trigger": "initial",
+      "approvalId": "approval_1767731355361_f8oi5pdqq",
+      "approvalTitle": "Approve steering doc: product.md (Unity-Discover)"
+    }
+  ]
+}

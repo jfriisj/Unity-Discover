@@ -3,6 +3,7 @@
 using System;
 using Discover.DroneRage.Game;
 using Discover.DroneRage.PowerUps;
+using Discover.DroneRage.Pvp;
 using Discover.Networking;
 using Fusion;
 using Meta.Utilities;
@@ -166,6 +167,15 @@ namespace Discover.DroneRage.Weapons
 
         private void OnDamage(IDamageable damageableAffected, float hpAffected, bool targetDied)
         {
+            if (DroneRagePvpMode.IsPvpMode())
+            {
+                var matchController = DroneRagePvpMatchController.Instance;
+                if (matchController == null || matchController.State != DroneRagePvpMatchController.MatchState.Running)
+                {
+                    return;
+                }
+            }
+
             Owner.TrackDamageStats(damageableAffected, hpAffected, targetDied);
         }
         

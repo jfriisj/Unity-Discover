@@ -68,7 +68,7 @@ namespace Discover.Menus
             {
                 if (!app)
                 {
-                    Debug.LogError($"Null app manifest in {nameof(m_appList)}.");
+                    Debug.LogWarning($"Null app manifest in {nameof(m_appList)}. (Missing reference in AppList asset?)");
                     continue;
                 }
                 var tile = m_appListMenu.AddApp(app.UniqueName, app.DisplayName, app.Icon, app.DisplayType);

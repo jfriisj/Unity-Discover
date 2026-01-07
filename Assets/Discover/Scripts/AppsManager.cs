@@ -71,7 +71,33 @@ namespace Discover
             if (AvatarColocationManager.Instance.CanPlaceOrMoveIcons)
             {
                 m_iconPlacementController.StartPlacement(appManifest, handedness);
+                return;
             }
+
+            var mainCamera = Camera.main;
+            if (mainCamera == null)
+            {
+                Debug.LogWarning(
+                    $"[{nameof(AppsManager)}] No icon exists for '{appManifest.UniqueName}' and placement is blocked " +
+                    $"(player not colocated). Camera.main is null, so the app cannot be launched at a default pose.");
+                return;
+            }
+
+            var cameraTransform = mainCamera.transform;
+            var forwardFlat = cameraTransform.forward;
+            forwardFlat.y = 0;
+            if (forwardFlat.sqrMagnitude < 0.0001f)
+            {
+                forwardFlat = Vector3.forward;
+            }
+            forwardFlat.Normalize();
+
+            var spawnPosition = cameraTransform.position + forwardFlat * 1.0f;
+            var spawnRotation = Quaternion.LookRotation(-forwardFlat, Vector3.up);
+            Debug.LogWarning(
+                $"[{nameof(AppsManager)}] No icon exists for '{appManifest.UniqueName}' and placement is blocked " +
+                $"(player not colocated). Launching app at a default pose instead.");
+            NetworkApplicationManager.Instance.LaunchApplication(appManifest, spawnPosition, spawnRotation);
         }
 
         public void InitializeIcons()

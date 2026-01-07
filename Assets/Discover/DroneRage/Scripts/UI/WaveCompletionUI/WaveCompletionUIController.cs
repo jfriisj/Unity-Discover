@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections;
+using Discover.DroneRage.Pvp;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -10,10 +11,8 @@ namespace Discover.DroneRage.UI.WaveCompletionUI
 {
     public class WaveCompletionUIController : MonoBehaviour
     {
-
-
         [SerializeField]
-        private string m_waveCompleteText = $"> WAVE_# C0MPLETE.";
+        private string m_waveCompleteText = "> WAVE_# C0MPLETE.";
 
         [SerializeField]
         private float m_fadeInTime = 0.1f;
@@ -40,6 +39,19 @@ namespace Discover.DroneRage.UI.WaveCompletionUI
         {
             Assert.IsNotNull(m_text, $"{m_text} cannot be null.");
             Assert.IsNotNull(m_canvasGroup, $"{m_canvasGroup} cannot be null.");
+        }
+
+        private void Start()
+        {
+            if (DroneRagePvpMode.IsPvpMode())
+            {
+                m_canvasGroup.alpha = 1.0f;
+                if (m_showUICoroutine != null)
+                {
+                    StopCoroutine(m_showUICoroutine);
+                    m_showUICoroutine = null;
+                }
+            }
         }
 
         private void OnDisable()
@@ -70,13 +82,25 @@ namespace Discover.DroneRage.UI.WaveCompletionUI
             {
                 StopCoroutine(m_showUICoroutine);
                 m_showUICoroutine = null;
-                m_canvasGroup.alpha = 0.0f;
+                
+                // In PvP mode we want to stay visible
+                if (!DroneRagePvpMode.IsPvpMode())
+                {
+                    m_canvasGroup.alpha = 0.0f;
+                }
+                else
+                {
+                    m_canvasGroup.alpha = 1.0f;
+                }
             }
         }
 
         private void StartShowUI()
         {
-            StopShowUI();
+            if (m_showUICoroutine != null)
+            {
+                StopCoroutine(m_showUICoroutine);
+            }
             m_showUICoroutine = StartCoroutine(ShowUI());
         }
 
@@ -84,6 +108,27 @@ namespace Discover.DroneRage.UI.WaveCompletionUI
         {
             yield return FadeUIIn();
             yield return new WaitForSeconds(m_displayTime);
+            
+            // In PvP mode, if the match is running or ended, we tend to stay visible
+            // However, the "Wave Complete" text should ideally disappear. 
+            // For now, if in PvP, we just keep the whole thing visible if the match is ended.
+            if (DroneRagePvpMode.IsPvpMode())
+            {
+                var matchController = DroneRagePvpMatchController.Instance;
+                if (matchController != null && matchController.State == DroneRagePvpMatchController.MatchState.Ended)
+                {
+                    m_canvasGroup.alpha = 1.0f;
+                    m_showUICoroutine = null;
+                    yield break;
+                }
+                
+                // If match is still running, we might want to fade out the WAVE text but the scoreboard stays.
+                // Since they share the CanvasGroup, we'll just keep it visible for now in PvP.
+                m_canvasGroup.alpha = 1.0f;
+                m_showUICoroutine = null;
+                yield break;
+            }
+
             yield return FadeUIOut();
 
             gameObject.SetActive(false);
@@ -92,6 +137,12 @@ namespace Discover.DroneRage.UI.WaveCompletionUI
 
         private IEnumerator FadeUIIn()
         {
+            if (DroneRagePvpMode.IsPvpMode())
+            {
+                m_canvasGroup.alpha = 1f;
+                yield break;
+            }
+
             m_canvasGroup.alpha = 0.0f;
             var time = 0f;
             while (time < m_fadeInTime)
